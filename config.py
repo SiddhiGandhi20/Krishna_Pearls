@@ -1,6 +1,6 @@
 import os
 class Config:
-    MONGO_URI =  "mongodb+srv://siddhigandhi:Siddhi2013@cluster0.4yg1e.mongodb.net/krishna_pearls?retryWrites=true&w=majority&appName=Cluster0"
+    MONGO_URI = "mongodb://127.0.0.1:27017/krishna_pearls"
 
     UPLOAD_FOLDER = os.path.join(os.getcwd(), 'uploads')  # Folder to store images
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}  # Allowed file extensions for images

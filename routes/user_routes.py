@@ -1,9 +1,11 @@
-from flask import Blueprint, request, jsonify
 import re
+from flask import Blueprint, request, jsonify
+from flask_cors import CORS  # Import CORS
 from models.user_model import UserModel
 
 # Blueprint setup
 auth_bp = Blueprint("auth", __name__)
+CORS(auth_bp)  # Enable CORS for this blueprint
 
 def create_auth_routes(db):
     user_model = UserModel(db)
