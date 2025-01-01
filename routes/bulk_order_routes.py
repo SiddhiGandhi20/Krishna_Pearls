@@ -2,6 +2,8 @@ from flask import Blueprint, request, jsonify, send_from_directory
 from werkzeug.utils import secure_filename
 import os
 from bson import ObjectId
+import uuid
+
 
 def create_bulk_order_routes(db, upload_folder):
     bulk_order_bp = Blueprint('bulk_order', __name__)
@@ -12,6 +14,8 @@ def create_bulk_order_routes(db, upload_folder):
         if isinstance(obj, ObjectId):
             return str(obj)
         return obj
+    
+    image_folder = os.path.join(os.path.dirname(__file__), '../uploads')
 
     # POST: Create a new Pearl
     @bulk_order_bp.route("/bulk_order", methods=["POST"])
@@ -30,8 +34,10 @@ def create_bulk_order_routes(db, upload_folder):
 
             # Save image file
             filename = secure_filename(image.filename)
-            image_path = os.path.join(upload_folder, filename)
+            image_path = os.path.join(image_folder, filename)
             image.save(image_path)
+
+            
 
             # Prepare data to insert into MongoDB (only storing the filename)
             pearl_data = {
@@ -94,9 +100,9 @@ def create_bulk_order_routes(db, upload_folder):
                 # Handle image update
                 image = request.files.get("image")
                 filename = secure_filename(image.filename)
-                image_path = os.path.join(upload_folder, filename)
+                image_path = os.path.join(image_folder, filename)
                 image.save(image_path)
-                updated_data["image"] = filename  # Store only filename
+                updated_data["image"] = filename
 
             # Update the pearl in the database
             result = db.bulk_order.update_one({"id": id}, {"$set": updated_data})
@@ -120,11 +126,11 @@ def create_bulk_order_routes(db, upload_folder):
             return jsonify({"message": f"Error deleting pearl: {str(e)}"}), 500
 
     # Serve images from the 'uploads' directory
-    @bulk_order_bp.route('/images_bulk/<filename>', methods=['GET'])
+    @bulk_order_bp.route('/images/<filename>', methods=['GET'])
     def get_image(filename):
         try:
             # Return image from the provided image folder
-            return send_from_directory(upload_folder, filename)
+            return send_from_directory(image_folder, filename)
         except Exception as e:
             return jsonify({"message": f"Error fetching image: {str(e)}"}), 500
 

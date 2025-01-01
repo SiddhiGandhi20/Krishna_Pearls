@@ -36,6 +36,8 @@ def create_pearl_routes(db, upload_folder):
             image_path = os.path.join(image_folder, filename)
             image.save(image_path)
 
+     
+
             # Prepare data to insert into MongoDB
             pearl_data = {
                 "id": pearl_id,  # Use custom ID
