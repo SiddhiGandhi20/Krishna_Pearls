@@ -9,6 +9,7 @@ from routes.product_routes import create_product_routes
 from routes.pearls_routes import create_pearl_routes
 from routes.pearl_detail_routes import create_pearl_detail_routes
 from routes.bulk_order_routes import create_bulk_order_routes
+from routes.cart_routes import create_cart_routes
 import os
 
 # Initialize Flask app
@@ -45,6 +46,7 @@ app.register_blueprint(create_product_routes(mongo.db, app.config["UPLOAD_FOLDER
 app.register_blueprint(create_pearl_routes(mongo.db, app.config["UPLOAD_FOLDER"]))
 app.register_blueprint(create_pearl_detail_routes(mongo.db))
 app.register_blueprint(create_bulk_order_routes(mongo.db, app.config["UPLOAD_FOLDER"]))
+app.register_blueprint(create_cart_routes(mongo.db))
 
 # Run the Flask app
 if __name__ == "__main__":
