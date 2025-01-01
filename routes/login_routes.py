@@ -1,10 +1,14 @@
 import jwt
 import datetime
 from flask import Blueprint, request, jsonify
+from flask_cors import CORS  # Import CORS for this specific blueprint
 from models.login_model import LoginModel
 
 # Blueprint setup
 login_bp = Blueprint("login", __name__)
+
+# Enable CORS for this specific blueprint
+CORS(login_bp)
 
 # Secret key for signing JWT tokens (store securely, e.g., in environment variables)
 SECRET_KEY = "your_secret_key"

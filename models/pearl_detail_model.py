@@ -4,7 +4,7 @@ class PearlDetailModel:
     def __init__(self, db):
         self.collection = db.detail_pearl  # Use the 'detail_pearl' collection
 
-    def create_pearl_detail(self, pearl_id, name, origin, carat, weight, per_carat_price, total_price, image):
+    def create_pearl_detail(self, pearl_id, name, origin, carat, per_carat_price, total_price, image):
         """Insert a new pearl detail document."""
         try:
             detail = {
@@ -12,7 +12,6 @@ class PearlDetailModel:
                 "name": name,
                 "origin": origin,
                 "carat": carat,
-                "weight": weight,
                 "per_carat_price": per_carat_price,
                 "total_price": total_price,
                 "image": image,
@@ -31,6 +30,18 @@ class PearlDetailModel:
             return details
         except Exception as e:
             raise Exception(f"Database error: {e}")
+        
+    def get_details_by_pearl_id(self, pearl_id):
+        """
+        Fetch all details associated with a specific pearl_id from the database.
+        """
+        try:
+            details = list(self.collection.find({"pearl_id": pearl_id}))
+            for detail in details:
+                detail["_id"] = str(detail["_id"])  # Convert ObjectId to string
+            return details
+        except Exception as e:
+            raise Exception(f"Error fetching details by pearl_id: {str(e)}")
 
     def get_pearl_detail_by_id(self, detail_id):
         """Fetch a pearl detail by its ID."""
